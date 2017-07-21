@@ -1,0 +1,5 @@
+vars:
+    lgl_var1: 
+        allow_na: True
+    lgl_var2:
+        allow_na: False

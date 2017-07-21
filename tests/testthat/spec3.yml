@@ -1,0 +1,19 @@
+vars:
+    - num_var1:
+        type: numeric
+        allow_na: True
+        
+    - num_var2:
+        type: numeric
+        allow_na: False
+        lower: 3
+        upper: 3
+    
+    - char_var1:
+        type: character
+        
+    - lgl_var2:
+        type: logical
+        
+    - lgl_var1
+    

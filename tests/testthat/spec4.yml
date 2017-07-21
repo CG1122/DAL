@@ -1,0 +1,18 @@
+vars_logical:
+    - lgl_var1
+    - lgl_var2
+    
+vars_numeric:
+    - num_var1
+    - num_var2:
+        allow_na: False
+    
+vars_character:
+    - char_var1
+    
+junk:
+    adawda
+    
+    
+vars:
+    - lgl_var3
