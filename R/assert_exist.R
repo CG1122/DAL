@@ -2,7 +2,7 @@
 
 
 p_assert_exist <- function( dat , var ){
-    if ( !( var %in% names(dat) )) warning("Variable does not exist")
+    if ( !( var %in% names(dat) )) warning(dal_msg$glb$exist)
     return(NULL)
 }
 

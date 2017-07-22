@@ -1,18 +1,18 @@
 assert_character <- function(x, format_re = NULL, values = NULL){
 
     if ( !all(is_character(x)))  {
-        warning("Variable is not character")
+        warning(dal_msg$char$char)
         return(NULL)
     }
 
     if ( !is.null(format_re))
         if( !all ( grepl( format_re , x)))
-            warning("Regular expression format violated")
+            warning(dal_msg$char$format_re)
 
 
     if( !is.null(values))
         if( !all( x %in% values))
-            warning("Contains unexpected values")
+            warning(dal_msg$char$values)
 
 
     return(NULL)

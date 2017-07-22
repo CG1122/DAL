@@ -5,7 +5,7 @@
 \title{Assert_spec
 Function to check whether a dataset meets a desired specification}
 \usage{
-assert_spec(DAT, spec = NULL, file = NULL, error = FALSE)
+assert_spec(DAT, spec = NULL, file = NULL, error = FALSE, warn = TRUE)
 }
 \arguments{
 \item{DAT}{Input dataset}
@@ -14,7 +14,9 @@ assert_spec(DAT, spec = NULL, file = NULL, error = FALSE)
 
 \item{file}{file name containing YAML dataset specification}
 
-\item{error}{Should the function error if issues are found ? (default is just a warning)}
+\item{error}{Should the function throw a error if issues are found ? (default False)}
+
+\item{warn}{Should the function throw a warning if issues are found ? (default True)}
 }
 \description{
 Assert_spec

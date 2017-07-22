@@ -5,9 +5,10 @@
 #' @param DAT Input dataset
 #' @param spec YAML dataset specification
 #' @param file file name containing YAML dataset specification
-#' @param error Should the function error if issues are found ? (default is just a warning)
+#' @param warn Should the function throw a warning if issues are found ? (default True)
+#' @param error Should the function throw a error if issues are found ? (default False)
 #' @export
-assert_spec <- function( DAT , spec = NULL , file = NULL, error = FALSE){
+assert_spec <- function( DAT , spec = NULL , file = NULL, error = FALSE, warn = TRUE){
 
     spec_formated <- get_spec ( spec , file)
 
@@ -28,17 +29,18 @@ assert_spec <- function( DAT , spec = NULL , file = NULL, error = FALSE){
     }
 
     DAL <- list(
-        compliant =  (map_dbl(RES , length) %>% sum) == 0 ,
-        variables = RES
+        issue_count = (map_dbl(RES , length) %>% sum),
+        issue_vector = flatten_chr(RES),
+        issue_list = RES,
+        compliant =  (map_dbl(RES , length) %>% sum) == 0
     )
 
     class(DAL) <- "DAL"
 
 
     if( !DAL$compliant ) {
-        message <- "Data did not conform to the specification"
-        if ( error) stop(message)
-        else warning(message)
+        if ( warn  ) warning( dal_msg$glb$fail )
+        if ( error ) stop( dal_msg$glb$fail )
     }
 
     return(DAL)
@@ -52,7 +54,7 @@ assert_spec <- function( DAT , spec = NULL , file = NULL, error = FALSE){
 #' @export
 print.DAL <- function(x, ...){
 
-    x <- x$variables
+    x <- x$issue_list
 
     for ( i in names(x) ){
         if( length(x[[i]]) != 0) {

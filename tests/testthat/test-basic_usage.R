@@ -1,34 +1,8 @@
 
 
-dat <- data.frame(
-    stringsAsFactors = F,
-    lglvar1 = c(T,F ,T ,F),
-    lglvar2 = c(T,F , NA , T),
-    numvar1 = c(1,2,3,4),
-    numvar2 = c(1,2,3,NA),
-    charvar1 = c( "hello" , "how" , "hope", "his"),
-    charvar2 = c("two words" , "again again" , "dup dup" , "so there"),
-    charvar3 = c("yes" , "no" , "yes" , "yes")
-)
 
 
-
-
-test_that( "Basic variable detection",{
-    spec <- "
-        vars:
-            - lglvar1
-            - lglvar2
-            - numvar1
-            - numvar2
-    "
-    expect_true( assert_spec( dat , spec)$compliant )
-})
-
-
-
-
-test_that( "Missing variables give warnings", {
+test_that( "Full Function - Variable detection", {
 
     spec <- "
         vars:
@@ -36,15 +10,37 @@ test_that( "Missing variables give warnings", {
             - lglvar2
             - numvar1
             - numvar2
-            - numvar3
     "
-    expect_warning( assert_spec( dat , spec) )
+    expect_true(
+        assert_spec( test_dat , spec)$compliant
+    )
+
+
+    spec <- "
+        vars:
+            - lglvar1
+            - lglvar2
+            - numvar1
+            - numvar2
+            - missingvar1
+            - missingvar2
+            - missingvar3
+    "
+    expect_match(
+        assert_spec( test_dat , spec, warn = F)$issue_vector,
+        dal_msg$glb$exist
+    )
+
+    expect_length(
+        assert_spec( test_dat , spec, warn = F)$issue_vector,
+        3
+    )
 })
 
 
 
 
-test_that( "Basic type detection works", {
+test_that("Full Function - Type detection", {
 
     spec <- "
         vars_logical:
@@ -53,8 +49,9 @@ test_that( "Basic type detection works", {
         vars_numeric:
             - numvar1
     "
-
-    expect_true( assert_spec( dat , spec)$compliant )
+    expect_true(
+        assert_spec( test_dat , spec)$compliant
+    )
 
 
     spec <- "
@@ -64,7 +61,9 @@ test_that( "Basic type detection works", {
             - numvar1:
                 type: numeric
     "
-    expect_true( assert_spec( dat , spec)$compliant )
+    expect_true(
+        assert_spec( test_dat , spec)$compliant
+    )
 
     spec <- "
         vars_logical:
@@ -75,15 +74,17 @@ test_that( "Basic type detection works", {
         vars_numeric:
             - numvar1
     "
-
-    expect_warning( assert_spec( dat , spec) )
+    expect_match(
+        assert_spec( test_dat , spec, warn= F)$issue_vector ,
+        dal_msg$lgl$lgl
+    )
 
 })
 
 
 
 
-test_that("NA detection works", {
+test_that("Full Function - NA detection", {
 
 
     spec <- "
@@ -91,7 +92,10 @@ test_that("NA detection works", {
             lglvar1:
                 allow_na: False
     "
-    expect_true( assert_spec( dat , spec)$compliant )
+    expect_true(
+        assert_spec( test_dat , spec)$compliant
+    )
+
 
     spec <- "
         vars_logical:
@@ -100,58 +104,53 @@ test_that("NA detection works", {
             lglvar2:
                 allow_na: False
     "
-    expect_warning( assert_spec( dat , spec) )
+    expect_match(
+        assert_spec( test_dat , spec, warn = F)$issue_vector,
+        dal_msg$glb$na
+    )
+
+    expect_length(
+        assert_spec( test_dat , spec, warn = F)$issue_vector,
+        1
+    )
 
 })
 
 
 
-test_that( "Character regular expresion formats work",{
+test_that("Full Function - Class detection",{
+
+    test_class <- list(
+        x = c(1,2,3,4),
+        y = lm ( x~y , data= data.frame( x= rnorm(10) , y = rnorm(10)))
+
+    )
 
     spec <- "
-        vars_character:
-            charvar1:
-                format_re: 'h'
-            charvar2:
-                format_re: '\\w+ \\w+'
+        vars:
+            - x:
+                class: 'numeric'
+            - y:
+                class: 'lm'
     "
-    expect_true( assert_spec( dat , spec)$compliant)
+    expect_true(
+        assert_spec( test_class , spec)$compliant
+    )
 
     spec <- "
-        vars_character:
-            charvar1:
-                format_re: 'h'
-            charvar2:
-                format_re: '^\\w+$'
+        vars:
+            - x:
+                class: 'numeric'
+            - y:
+                class: 'numeric'
     "
-    expect_warning( assert_spec( dat , spec) )
+    expect_equal(
+        assert_spec( test_class , spec, warn = F)$issue_vector,
+        dal_msg$glb$class
+    )
 
 
 })
-
-
-test_that( "Character expected values work", {
-
-    spec <- "
-        vars_character:
-            charvar3:
-                values: ['yes' , 'no']
-    "
-    expect_true( assert_spec( dat , spec)$compliant)
-
-    spec <- "
-        vars_character:
-            charvar3:
-                values: ['yes' , 'n']
-    "
-    expect_warning( assert_spec( dat , spec) )
-})
-
-
-
-
-
-
 
 
 

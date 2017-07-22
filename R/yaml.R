@@ -33,13 +33,36 @@ yaml_format <- function(yam, group = NULL, type = NULL){
 }
 
 
+HANDLERS <- list(
+
+    'bool#yes' = function(x) {
+        if (x %in% c("y","yes")) {
+            return(x)
+        } else {
+            return(TRUE)
+        }
+    },
+
+    'bool#no' = function(x) {
+        if (x %in% c("n","no")) {
+            return(x)
+        } else {
+            return(FALSE)
+        }
+    }
+)
+
+
+
+
 
 get_spec <- function( spec = NULL , file = NULL){
+
     if( !is.null(spec) & !is.null(file)) stop("Can only handle 1 input of file or spec not both!!")
     if( is.null(spec) & is.null(file))   stop("No specification provided")
 
-    if ( !is.null(spec)) spec_yaml <- yaml.load(spec)
-    if ( !is.null(file)) spec_yaml <- yaml.load_file(file)
+    if ( !is.null(spec)) spec_yaml <- yaml.load(spec , handlers = HANDLERS)
+    if ( !is.null(file)) spec_yaml <- yaml.load_file(file, handlers = HANDLERS)
 
     groups <- grep( "^vars.*" , names(spec_yaml) , value = T)
     types <- sub( "vars_?" , "" , groups)

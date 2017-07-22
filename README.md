@@ -25,7 +25,7 @@ e.g.
 
 ```{r}
 spec <- "
-<yaml spec here>
+  <yaml spec>
 "
 
 assert_spec( data , spec)
@@ -72,7 +72,7 @@ vars_logical:
     - lglvar2
 ```
 
-Currently supported data types include `numeric`, `logical` and `character`. Additional options available for each type are detailed below.
+Currently supported data types include `numeric`, `logical` , `character`, `date` and `datetime`. Additional options available for each type are detailed below.
 
 ### Global options
 
@@ -81,6 +81,7 @@ The following options are supported by all types
 |Option| Purpose|
 |---|---|
 | allow_na | Specify whether missing values should be accepted |
+| class    | Specify whether a variable is a member of a specific class|
 
 e.g.
 
@@ -88,6 +89,7 @@ e.g.
 vars:
     numvar1:
         allow_na: False
+        class: integer
 ```
 
 ### Numeric
@@ -126,3 +128,11 @@ vars_character:
 ### Logical
 
 Currently there are no additional options for logicals
+
+### Date
+
+Currently there are no additional options for dates
+
+### Datetime
+
+Currently there are no additional options for datetimes

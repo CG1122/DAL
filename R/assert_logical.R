@@ -1,7 +1,7 @@
 assert_lgl <- function(x){
 
     if ( !all(is_logical(x)))  {
-        warning("Variable is not logical")
+        warning(dal_msg$lgl$lgl)
         return(NULL)
     }
 

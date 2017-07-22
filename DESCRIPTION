@@ -14,7 +14,8 @@ Imports:
     yaml
 Suggests:
     testthat,
-    knitr
+    knitr,
+    lubridate
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 LazyData: true
