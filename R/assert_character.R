@@ -1,6 +1,6 @@
 assert_character <- function(x, format_re = NULL, values = NULL){
 
-    if ( !all(is_character(x)))  {
+    if ( !all(  map_lgl(x , is_character )) )  {
         warning(dal_msg$char$char)
         return(NULL)
     }

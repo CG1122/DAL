@@ -10,35 +10,9 @@ decorate_assert <- function(f){
 }
 
 
-
-remove_na <- function(x ){
-    x[!is.na(x)]
-}
-
-
-assert_na <- function( x){
-    if( any(is.na(x)))
-        warning ( dal_msg$glb$na)
-    return(NULL)
-}
-
-
 assert_default <- function(x){
     return(NULL)
 }
-
-
-
-
-assert_class <- function( x , cls){
-
-    if ( ! all(class(x) %in% cls) ) {
-        warning( dal_msg$glb$class)
-    }
-
-    return(NULL)
-}
-
 
 
 

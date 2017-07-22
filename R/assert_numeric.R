@@ -1,6 +1,6 @@
 assert_numeric <- function(x, upper = NULL , lower = NULL){
 
-    if ( !all(is_numeric(x)))  {
+    if ( !all( map_lgl( x , is.numeric ) ))  {
         warning(dal_msg$num$num)
         return(NULL)
     }

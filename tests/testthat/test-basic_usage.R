@@ -123,7 +123,14 @@ test_that("Full Function - Class detection",{
     test_class <- list(
         x = c(1,2,3,4),
         y = lm ( x~y , data= data.frame( x= rnorm(10) , y = rnorm(10)))
+    )
 
+    test_class2 <- list(
+        x = c(1,2,3,4),
+        y = list(
+            lm ( x~y , data= data.frame( x= rnorm(10) , y = rnorm(10))) ,
+            lm ( x~y , data= data.frame( x= rnorm(10) , y = rnorm(10)))
+        )
     )
 
     spec <- "
@@ -135,6 +142,9 @@ test_that("Full Function - Class detection",{
     "
     expect_true(
         assert_spec( test_class , spec)$compliant
+    )
+    expect_true(
+        assert_spec( test_class2 , spec)$compliant
     )
 
     spec <- "
@@ -148,12 +158,49 @@ test_that("Full Function - Class detection",{
         assert_spec( test_class , spec, warn = F)$issue_vector,
         dal_msg$glb$class
     )
-
-
 })
 
 
 
+test_that("Full Function - Class detection (various input combinations)",{
+
+    test_class3 <- list(
+        x = c( 1L , 2L , 3L),
+        y = c(1,2,3,4,5),
+        z = 1L,
+        w = list(30L),
+        u = list( a = 1L , b = 2L)
+    )
+
+    spec <- "
+        vars_numeric:
+            - x:
+                class: integer
+            - y:
+                class: integer
+            - z:
+                class: integer
+            - w:
+                class: integer
+            - u:
+                class: integer
+
+    "
+    expect_equal(
+        assert_spec( test_class3 , spec, warn = F)$issue_vector,
+        dal_msg$glb$class
+    )
+    expect_length(
+        assert_spec( test_class3 , spec, warn = F)$issue_list$y,
+        1
+    )
+    expect_length(
+        assert_spec( test_class3 , spec, warn = F)$issue_vector,
+        1
+    )
+
+
+})
 
 
 
